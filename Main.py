@@ -203,11 +203,32 @@ if page == "Ringkasan Tim":
         fig_grouped_bar.update_layout(xaxis_title="", yaxis_title="Rata-rata per Game", legend_title="Objektif")
         st.plotly_chart(fig_grouped_bar, use_container_width=True)
 
+    tower_df = team_stats_filtered[
+        ['Team Name', 'Tower Destroy Count per Game', 'Tower Destroyed Count per Game']].copy()
+    tower_df = tower_df.melt(id_vars='Team Name', var_name='Metric', value_name='Count per Game')
+
+    tower_df['Metric'] = tower_df['Metric'].replace({
+        'Tower Destroy Count per Game': 'Destroy',
+        'Tower Destroyed Count per Game': 'Destroyed'
+    })
+
+    fig_tower_bar = px.bar(tower_df, x="Team Name", y="Count per Game", color="Metric",
+                           barmode='group', text_auto='.2f',
+                           title="Objektif Turret/game",
+                           color_discrete_map={
+                               'Destroy': 'green',
+                               'Destroyed': 'red'
+                           })
+    fig_tower_bar.update_layout(xaxis_title="", yaxis_title="Avg/game", legend_title="Turret")
+    st.plotly_chart(fig_tower_bar, use_container_width=True)
+
     with st.expander("Lihat Analisis Objektif"):
         st.write("""
         - **Kekuatan di Early Game:** Data menunjukkan NAVI cukup kompetitif dalam perebutan objektif awal (Turtle). Mereka mampu mengamankan rata-rata **1.26 Turtle per game**, angka yang hampir menyamai ONIC (1.4 per game). Ini menandakan bahwa strategi dan koordinasi mereka untuk 10 menit pertama permainan sudah cukup solid.
 
         - **Problem Transisi ke Late Game:** Namun, kekuatan ini tidak berlanjut. Terlihat adanya penurunan performa yang drastis saat game beralih ke perebutan Lord. NAVI hanya mampu mengamankan **0.42 Lord per game**, sangat jauh di bawah ONIC yang dominan dengan 1.12 Lord per game.
+
+        - **Kontrol Map (Turret):** NAVI kehilangan rata-rata **7.21 turret per game**, sementara hanya mampu menghancurkan **3.34 turret** milik lawan. Perbedaan signifikan ini menunjukkan bahwa mereka terus-menerus kehilangan kontrol *map* dan berada di bawah tekanan.
 
         - **Insight Utama:** Pola ini mengindikasikan bahwa NAVI seringkali **kehilangan arah dan momentum setelah fase Turtle berakhir**. Mereka tampak kesulitan dalam **transisi strategi dari mid-game ke late-game**. Kegagalan mengontrol Lord secara konsisten inilah yang menjadi salah satu penyebab utama mereka kehilangan kontrol *map* dan akhirnya kalah dalam pertandingan.
         """)
@@ -489,21 +510,24 @@ if page == "Analisis Pemain [NAVI]":
     with col1:
         st.subheader("Karss")
         st.image("images/Karss.png", width=250)
-        st.metric("Games Won as EXP", f"{karss_exp_matches['Score_NAVI'].sum()} Game")
+        st.metric("Games Won as EXP (from 15 games)", f"{karss_exp_matches['Score_NAVI'].sum()} Game")
+        st.write(f"**WR: 20.0%%**")
         st.write(f"**KDA Ratio:** {karss_stats['KDA Ratio']:.2f} (all role)")
         st.write(f"**Avg Deaths:** {karss_stats['Average Deaths']:.2f}")
 
     with col2:
         st.subheader("bq syaii")
         st.image("images/bq syaii.png", width=250)
-        st.metric("Games Won as EXP", f"{bq_syaii_matches['Score_NAVI'].sum()} Game")
+        st.metric("Games Won as EXP (from 16 games)", f"{bq_syaii_matches['Score_NAVI'].sum()} Game")
+        st.write(f"**WR: 12.5%**")
         st.write(f"**KDA Ratio:** {bq_syaii_stats['KDA Ratio']:.2f}")
         st.write(f"**Avg Deaths:** {bq_syaii_stats['Average Deaths']:.2f}")
 
     with col3:
         st.subheader("Febbb")
         st.image("images/Febbb.png", width=250)
-        st.metric("Games Won as EXP", f"{febbb_matches['Score_NAVI'].sum()} Game")
+        st.metric("Games Won as EXP (from 7 games)", f"{febbb_matches['Score_NAVI'].sum()} Game")
+        st.write(f"**WR: 14.3%**")
         st.write(f"**KDA Ratio:** {febbb_stats['KDA Ratio']:.2f}")
         st.write(f"**Avg Deaths:** {febbb_stats['Average Deaths']:.2f}")
 
@@ -532,7 +556,8 @@ if page == "Analisis Pemain [NAVI]":
     with col1:
         st.subheader("Hanafi")
         st.image("images/Hanafi.png", width=250)
-        st.metric("Games Won as Roamer", f"{hanafi_roam_matches['Score_NAVI'].sum()} Game")
+        st.metric("Games Won as Roamer (from 15 games)", f"{hanafi_roam_matches['Score_NAVI'].sum()} Game")
+        st.write(f"**WR: 20.0%**")
         st.write(f"**KDA Ratio:** {hanafi_stats['KDA Ratio']:.2f}")
         st.write(f"**Average Assists:** {hanafi_stats['Average Assists']:.2f}")
         st.write(f"**Control time per game/s:** {hanafi_stats['Control time per game/s']:.2f}s")
@@ -540,17 +565,21 @@ if page == "Analisis Pemain [NAVI]":
     with col2:
         st.subheader("Karss")
         st.image("images/Karss.png", width=250)
-        st.metric("Games Won as Roamer", f"{karss_roam_matches['Score_NAVI'].sum()} Game")
+        st.metric("Games Won as Roamer (from 23 games)", f"{karss_roam_matches['Score_NAVI'].sum()} Game")
+        st.write(f"**WR: 13.0%**")
         st.write(f"**KDA Ratio:** {karss_stats['KDA Ratio']:.2f}  (all role)")
         st.write(f"**Average Assists:** {karss_stats['Average Assists']:.2f}")
         st.write(f"**Control time per game/s:** {karss_stats['Control time per game/s']:.2f}s")
 
     with st.expander("Lihat Analisis Roamer"):
         st.write("""
-        - **Playmaking:** Hanafi unggul dalam avg assist/game (6.67) dibandingkan Karss (5.47).
-        - **Efisiensi & Inisiasi:** Hanafi juga memiliki KDA yang lebih tinggi (2.05) vs Karss (1.79). Namun, Karss unggul dalam durasi *crowd control* per game (15.23s) dibandingkan Hanafi (12.72s), menunjukkan kemampuan inisiasi yang lebih kuat.
-        - **Konteks Pertandingan:** Baik saat diisi oleh Hanafi maupun Karss, NAVI sama-sama meraih **3 kemenangan game**. Ini menunjukkan kedua pemain memiliki dampak yang sebanding dalam hal hasil akhir, meskipun dengan gaya yang berbeda.
-        - **Kesimpulan Awal:** Hanafi lebih unggul dalam *playmaking* (assists) dan lebih aman (KDA lebih tinggi). Di sisi lain, Karss memberikan inisiasi dan *crowd control* yang lebih lama, sesuatu yang mungkin dibutuhkan tim untuk memulai pertarungan.
+        - **Playmaking & Efisiensi:** Statistik individu menunjukkan keunggulan Hanafi. Dia memiliki rata-rata assist per game yang lebih tinggi (6.67) dibandingkan Karss (5.47) dan juga KDA yang lebih baik (2.05 vs 1.79).
+
+        - **Inisiasi Pertarungan:** Di sisi lain, Karss unggul dalam durasi *crowd control* per game (15.23 detik) dibandingkan Hanafi (12.72 detik), yang mengindikasikan kemampuan inisiasi yang lebih kuat untuk memulai pertarungan.
+
+        - **Dampak Kemenangan (Win Rate):** Ini adalah pembeda paling signifikan. Meskipun keduanya sama-sama meraih 3 kemenangan game, Hanafi mencapainya hanya dalam 15 game (**Win Rate 20.0%**), sementara Karss membutuhkan 23 game (**Win Rate 13.0%**). Data ini menunjukkan bahwa peluang tim untuk menang secara statistik lebih tinggi saat Hanafi bermain sebagai Roamer.
+
+        - **Kesimpulan:** Meskipun Karss memberikan durasi inisiasi yang lebih lama, efektivitas dan dampak Hanafi terhadap kemenangan tim jauh lebih unggul. Dengan KDA, assist, dan terutama **Win Rate yang lebih tinggi**, Hanafi terbukti menjadi pilihan Roamer yang lebih solid dan lebih efektif untuk NAVI.
         """)
     st.markdown("---")
 
@@ -693,13 +722,13 @@ if page == "Analisis Hero":
 
     col1, col2 = st.columns(2)
     with col1:
-        st.subheader(f"Studi Kasus: {hero_onic} ONIC")
+        st.subheader(f"{hero_onic} ONIC")
         st.metric(f"Win Rate {hero_onic} ONIC", f"{onic_hero_perf['Game Win Rate%']:.1f}%",
                   f"{onic_hero_perf['Game Win Rate%'] - meta_hero_perf_onic['Win Rate%']:.1f}% vs Avg MPL")
         st.metric(f"KDA {hero_onic} ONIC", f"{onic_hero_perf['KDA']:.2f}")
 
     with col2:
-        st.subheader(f"Studi Kasus: {hero_navi} NAVI")
+        st.subheader(f"{hero_navi} NAVI")
         st.metric(f"Win Rate {hero_navi} NAVI", f"{navi_hero_perf['Game Win Rate%']:.1f}%",
                   f"{navi_hero_perf['Game Win Rate%'] - meta_hero_perf_navi['Win Rate%']:.1f}% vs Avg MPL")
         st.metric(f"KDA {hero_navi} NAVI", f"{navi_hero_perf['KDA']:.2f}")
