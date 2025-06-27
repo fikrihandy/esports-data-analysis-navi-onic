@@ -732,7 +732,7 @@ if page == "Rekomendasi Strategis":
     st.header("Data #1: Dominasi Gold Laner")
     st.markdown(
         """
-        **Temuan Paling Kritis:** Xyve bukanlah sekadar pemain yang bagus, dia adalah pemain terbaik di tim NAVI.
+        Xyve bukanlah sekadar pemain yang bagus, dia adalah pemain terbaik di tim NAVI.
         """
     )
     # Visualisasi data Xyve
