@@ -199,7 +199,7 @@ if page == "Ringkasan Tim":
         })
 
         fig_grouped_bar = px.bar(objective_df, x="Team Name", y="Count per Game", color="Objective",
-                                 barmode='group', text_auto='.2f', title="Rata-rata Objektif Dimenangkan per Game")
+                                 barmode='group', text_auto='.2f', title="Avg Turtle/Lord per Game")
         fig_grouped_bar.update_layout(xaxis_title="", yaxis_title="Rata-rata per Game", legend_title="Objektif")
         st.plotly_chart(fig_grouped_bar, use_container_width=True)
 
