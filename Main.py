@@ -229,14 +229,7 @@ if page == "Ringkasan Tim":
 # ==============================================================================
 
 if page == "Analisis Pemain [vs ONIC]":
-    st.title("Analisis Pemain: Fokus pada Efisiensi & Kontribusi per Game")
-    st.info(
-        """
-        Analisis ini telah dimodifikasi untuk memastikan perbandingan yang adil.
-        Semua metrik menggunakan **rata-rata per game** atau **rasio**, bukan total absolut,
-        untuk menghilangkan bias dari perbedaan jumlah pertandingan yang dimainkan.
-        """
-    )
+    st.title("Analisis Pemain")
     st.markdown("---")
 
     # --- 1. Jungler: Kairi (ONIC) vs Woshipaul (NAVI) ---
