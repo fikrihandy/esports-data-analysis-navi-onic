@@ -44,7 +44,7 @@ def convert_df_to_csv(df):
 
 # --- HALAMAN 1: ANALISIS DETAIL PEMAIN ---
 def page_player_analysis(stats_df, hero_pool_df):
-    st.title("📊 Dashboard Analisis Jungler MLBB")
+    st.title("📊 Stats Jungler MLBB")
 
     # Pemilihan Pemain
     player_list = sorted(stats_df['Player'].unique())
